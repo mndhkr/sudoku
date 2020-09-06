@@ -1,0 +1,10 @@
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\bin\Debug\Sudoku.exe.config
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\bin\Debug\Sudoku.exe
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\bin\Debug\Sudoku.pdb
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.csprojAssemblyReference.cache
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.Form1.resources
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.Properties.Resources.resources
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.csproj.GenerateResource.cache
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.csproj.CoreCompileInputs.cache
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.exe
+C:\Users\Shimoda\source\repos\mndhkr\sudoku\Sudoku\obj\Debug\Sudoku.pdb
