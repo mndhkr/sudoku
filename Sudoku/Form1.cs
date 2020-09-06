@@ -18,6 +18,7 @@ namespace Sudoku
         {
             InitializeComponent();
 
+            Sudoku = new Sudoku();
             Sudoku.Grid = new TextBox[9, 9];
 
             this.Sudoku.Grid[0, 0] = textBox1;
@@ -60,9 +61,6 @@ namespace Sudoku
             this.Sudoku.Grid[3, 7] = textBox35;
             this.Sudoku.Grid[3, 8] = textBox36;
 
-
-
-
             this.Sudoku.Grid[4, 0] = textBox37;
             this.Sudoku.Grid[4, 1] = textBox38;
             this.Sudoku.Grid[4, 2] = textBox39;
@@ -102,7 +100,6 @@ namespace Sudoku
             this.Sudoku.Grid[7, 6] = textBox70;
             this.Sudoku.Grid[7, 7] = textBox71;
             this.Sudoku.Grid[7, 8] = textBox72;
-
 
             this.Sudoku.Grid[8, 0] = textBox73;
             this.Sudoku.Grid[8, 1] = textBox74;
