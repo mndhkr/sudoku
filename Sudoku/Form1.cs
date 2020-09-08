@@ -110,6 +110,54 @@ namespace Sudoku
             this.Sudoku.Grid[8, 6] = textBox79;
             this.Sudoku.Grid[8, 7] = textBox80;
             this.Sudoku.Grid[8, 8] = textBox81;
+
+            this.Sudoku.Grid[0, 1].Text = "5";
+            this.Sudoku.Grid[0, 2].Text = "1";
+            
+            this.Sudoku.Grid[0, 3].Text = "2";
+
+            this.Sudoku.Grid[0, 7].Text = "7";
+
+
+            this.Sudoku.Grid[1, 0].Text = "2";
+
+            this.Sudoku.Grid[1, 4].Text = "7";
+
+            this.Sudoku.Grid[1, 7].Text = "1";
+            this.Sudoku.Grid[1, 8].Text = "6";
+
+
+            this.Sudoku.Grid[2, 0].Text = "3";
+
+            this.Sudoku.Grid[2, 3].Text = "1";
+            this.Sudoku.Grid[2, 4].Text = "4";
+
+
+            this.Sudoku.Grid[3, 0].Text = "8";
+            this.Sudoku.Grid[3, 2].Text = "3";
+
+            this.Sudoku.Grid[3, 4].Text = "2";
+            this.Sudoku.Grid[3, 5].Text = "6";
+
+
+            this.Sudoku.Grid[4, 1].Text = "7";
+            this.Sudoku.Grid[4, 2].Text = "2";
+
+            this.Sudoku.Grid[4, 3].Text = "3";
+            this.Sudoku.Grid[4, 5].Text = "1";
+
+            this.Sudoku.Grid[4, 6].Text = "6";
+            this.Sudoku.Grid[4, 7].Text = "9";
+
+
+            this.Sudoku.Grid[5, 3].Text = "9";
+            this.Sudoku.Grid[5, 4].Text = "5";
+
+            this.Sudoku.Grid[5, 6].Text = "2";
+            this.Sudoku.Grid[5, 8].Text = "8";
+
+
+
         }
 
         private void button1_Click(object sender, EventArgs e)
