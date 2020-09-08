@@ -136,7 +136,7 @@ namespace Sudoku
                     {
                         if(CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
                         {
-                            CandidatesGrid[i, j].AddLast(n);
+                            CandidatesGrid[x, y].AddLast(n);
                             Console.WriteLine("Aggiungo {}, in {},{}", n, x, y);
                         }
                     }
