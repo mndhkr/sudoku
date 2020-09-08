@@ -20,6 +20,13 @@ namespace Sudoku
 
             Sudoku = new Sudoku();
 
+            AssociateTextBoxes();
+
+            PrepareForTestEasy();
+        }
+
+        private void AssociateTextBoxes()
+        {
             this.Sudoku.Grid[0, 0] = textBox1;
             this.Sudoku.Grid[0, 1] = textBox2;
             this.Sudoku.Grid[0, 2] = textBox3;
@@ -109,10 +116,13 @@ namespace Sudoku
             this.Sudoku.Grid[8, 6] = textBox79;
             this.Sudoku.Grid[8, 7] = textBox80;
             this.Sudoku.Grid[8, 8] = textBox81;
+        }
 
+        private void PrepareForTestEasy()
+        {
             this.Sudoku.Grid[0, 1].Text = "5";
             this.Sudoku.Grid[0, 2].Text = "1";
-            
+
             this.Sudoku.Grid[0, 3].Text = "2";
 
             this.Sudoku.Grid[0, 7].Text = "7";
@@ -181,6 +191,21 @@ namespace Sudoku
         private void button1_Click(object sender, EventArgs e)
         {
             Sudoku.Solve();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Sudoku = new Sudoku();
+
+            AssociateTextBoxes();
+
+            for (int x = 0; x < 9; x++)
+            {
+                for (int y = 0; y < 9; y++)
+                {
+                    this.Sudoku.Grid[x, y].Text = "";
+                }
+            }
         }
     }
 }
