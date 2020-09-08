@@ -49,7 +49,7 @@ namespace Sudoku
             }
         }
 
-        public void printIntGrid()
+        public void PrintIntGrid()
         {
             for (int i = 0; i < 9; i++)
             {
@@ -77,9 +77,11 @@ namespace Sudoku
             IntGridFromTextBoxes();
             for (int i = 0; i < 100; i++)
             {
-                printIntGrid();
+                PrintIntGrid();
                 FindCandidates();
                 FixCandidates();
+                PrintIntGrid();
+                Console.WriteLine();
                 FixRemainders();
                 if (!hasCandidates())
                     break;
@@ -202,7 +204,7 @@ namespace Sudoku
                         if (CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
                         {
                             CandidatesGrid[x, y].AddLast(n);
-                            Console.WriteLine("Aggiungo {0}, in {1},{2}", n, x, y);
+                            Console.WriteLine("Candidato: {0}, in {1},{2}", n, x, y);
                         }
                     }
                 }
@@ -220,7 +222,7 @@ namespace Sudoku
                         int n = CandidatesGrid[x, y].First();
                         IntGrid[x, y] = n;
                         CandidatesGrid[x, y].RemoveFirst();
-                        Console.WriteLine("Fisso {0}, in {1},{2}", n, x, y);
+                        Console.WriteLine("Fisso da Candidati: {0}, in {1},{2}", n, x, y);
                     }
                 }
             }
@@ -228,6 +230,8 @@ namespace Sudoku
 
         public void FixRemainders()
         {
+            bool stop = false;
+
             // Controllo se nelle righe orizzontali manca un solo numero
             // e nel caso lo inserisco.
             for (int i = 0; i < 9; i++)
@@ -243,7 +247,7 @@ namespace Sudoku
 
                 if (zeroes == 1)
                 {
-                    for (int j = 0; j < 9; j++)
+                    for (int j = 0; j < 9 && !stop; j++)
                     {
                         if (IntGrid[i, j] == 0)
                         {
@@ -260,6 +264,8 @@ namespace Sudoku
                                 if (!found)
                                 {
                                     IntGrid[i, j] = n;
+                                    Console.WriteLine("Fisso Mancante Riga: {0} in {1},{2}", n, i, j);
+                                    stop = true;
                                     break;
                                 } else
                                 {
@@ -272,7 +278,7 @@ namespace Sudoku
             }
 
 
-
+            stop = false;
 
 
             //Controllo se nelle colonne verticali manca un solo numero
@@ -290,7 +296,7 @@ namespace Sudoku
 
                 if (zeroes == 1)
                 {
-                    for (int i = 0; i < 9; i++)
+                    for (int i = 0; i < 9 && !stop; i++)
                     {
                         if (IntGrid[i, j] == 0)
                         {
@@ -307,6 +313,8 @@ namespace Sudoku
                                 if (!found)
                                 {
                                     IntGrid[i, j] = n;
+                                    Console.WriteLine("Fisso Mancante Colonna: {0} in {1},{2}", n, i, j);
+                                    stop = true;
                                     break;
                                 } else
                                 {
@@ -318,7 +326,7 @@ namespace Sudoku
                 }
             }
 
-
+            stop = false;
 
 
             // Controllo se nel box manca un solo numero....
@@ -341,9 +349,9 @@ namespace Sudoku
 
                     if (zeroes == 1)
                     {
-                        for (int x = xBox * 3; x < xBox * 3 + 3; x++)
+                        for (int x = xBox * 3; x < xBox * 3 + 3 && !stop; x++)
                         {
-                            for (int y = yBox * 3; y < yBox * 3 + 3; y++)
+                            for (int y = yBox * 3; y < yBox * 3 + 3 && !stop; y++)
                             {
                                 if (IntGrid[x, y] == 0)
                                 {
@@ -368,6 +376,9 @@ namespace Sudoku
                                         if(!found)
                                         {
                                             IntGrid[x, y] = n;
+                                            Console.WriteLine("Fisso Box: {0} in {1},{2}", n, x, y);
+                                            stop = true;
+                                            break;
                                         } else
                                         {
                                             found = false;
