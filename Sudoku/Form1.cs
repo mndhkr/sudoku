@@ -22,7 +22,7 @@ namespace Sudoku
 
             AssociateTextBoxes();
 
-            PrepareForTestEasy();
+            PrepareForTestMedium();
         }
 
         private void AssociateTextBoxes()
@@ -186,6 +186,57 @@ namespace Sudoku
 
             this.Sudoku.Grid[8, 6].Text = "9";
             this.Sudoku.Grid[8, 7].Text = "2";
+        }
+
+        private void PrepareForTestMedium()
+        {
+            this.Sudoku.Grid[0, 0].Text = "7";
+            this.Sudoku.Grid[0, 4].Text = "9";
+            this.Sudoku.Grid[0, 6].Text = "2";
+            this.Sudoku.Grid[0, 8].Text = "1";
+
+            this.Sudoku.Grid[1, 2].Text = "6";
+            this.Sudoku.Grid[1, 3].Text = "8";
+            this.Sudoku.Grid[1, 4].Text = "2";
+
+            this.Sudoku.Grid[2, 1].Text = "2";
+            this.Sudoku.Grid[2, 4].Text = "6";
+            this.Sudoku.Grid[2, 5].Text = "3";
+            this.Sudoku.Grid[2, 8].Text = "4";
+
+
+            this.Sudoku.Grid[3, 1].Text = "1";
+            this.Sudoku.Grid[3, 2].Text = "7";
+            this.Sudoku.Grid[3, 5].Text = "8";
+            this.Sudoku.Grid[3, 6].Text = "6";
+
+
+            this.Sudoku.Grid[4, 0].Text = "8";
+            this.Sudoku.Grid[4, 1].Text = "5";
+            this.Sudoku.Grid[4, 7].Text = "3";
+            this.Sudoku.Grid[4, 8].Text = "2";
+
+
+            this.Sudoku.Grid[5, 2].Text = "2";
+            this.Sudoku.Grid[5, 4].Text = "7";
+            this.Sudoku.Grid[5, 6].Text = "9";
+            this.Sudoku.Grid[5, 7].Text = "1";
+
+
+            this.Sudoku.Grid[6, 0].Text = "2";
+            this.Sudoku.Grid[6, 3].Text = "1";
+            this.Sudoku.Grid[6, 5].Text = "7";
+            this.Sudoku.Grid[6, 7].Text = "8";
+
+            this.Sudoku.Grid[7, 1].Text = "8";
+            this.Sudoku.Grid[7, 4].Text = "2";
+            this.Sudoku.Grid[7, 8].Text = "4";
+
+
+            this.Sudoku.Grid[8, 0].Text = "6";
+            this.Sudoku.Grid[8, 2].Text = "3";
+            this.Sudoku.Grid[8, 4].Text = "5";
+            this.Sudoku.Grid[8, 8].Text = "7";
         }
 
         private void button1_Click(object sender, EventArgs e)

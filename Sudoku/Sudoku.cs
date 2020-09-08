@@ -16,7 +16,7 @@ namespace Sudoku
         public Sudoku()
         {
             Grid = new TextBox[9, 9];
-            IntGrid = new int[9,9];
+            IntGrid = new int[9, 9];
             InitCandidates();
         }
 
@@ -27,7 +27,8 @@ namespace Sudoku
             try
             {
                 value = Int32.Parse(t.Text);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 value = 0;
             }
@@ -50,9 +51,9 @@ namespace Sudoku
 
         public void printIntGrid()
         {
-            for(int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
-                for(int j = 0; j < 9; j++)
+                for (int j = 0; j < 9; j++)
                 {
                     Console.Write(IntGrid[i, j]);
                 }
@@ -79,6 +80,7 @@ namespace Sudoku
                 printIntGrid();
                 FindCandidates();
                 FixCandidates();
+                FixRemainders();
                 if (!hasCandidates())
                     break;
                 InitCandidates();
@@ -92,7 +94,7 @@ namespace Sudoku
             {
                 for (int y = 0; y < 9; y++)
                 {
-                    if(CandidatesGrid[x,y].Count > 0)
+                    if (CandidatesGrid[x, y].Count > 0)
                     {
                         return true;
                     }
@@ -103,10 +105,10 @@ namespace Sudoku
 
         public bool CheckOrizontal(int n, int i, int j)
         {
-            for(int y = 0; y < 9; y++)
+            for (int y = 0; y < 9; y++)
             {
                 if (y == j) continue;
-                if(n == IntGrid[i,y])
+                if (n == IntGrid[i, y])
                 {
                     return false;
                 }
@@ -130,38 +132,42 @@ namespace Sudoku
         public bool CheckBox(int n, int i, int j)
         {
             int xBox = -1;
-            if(i >= 0 && i < 3)
+            if (i >= 0 && i < 3)
             {
                 xBox = 0;
-            } else if (i >= 3 && i < 6)
+            }
+            else if (i >= 3 && i < 6)
             {
                 xBox = 1;
-            } else if(i >= 6 && i < 9)
+            }
+            else if (i >= 6 && i < 9)
             {
                 xBox = 2;
             }
 
             int yBox = -1;
-            if(j >= 0 && j < 3)
+            if (j >= 0 && j < 3)
             {
                 yBox = 0;
-            } else if(j >= 3 && j < 6)
+            }
+            else if (j >= 3 && j < 6)
             {
                 yBox = 1;
-            } else if (j >= 6 && j < 9)
+            }
+            else if (j >= 6 && j < 9)
             {
                 yBox = 2;
             }
 
-            for(int x = xBox*3; x < xBox*3 + 3; x++)
+            for (int x = xBox * 3; x < xBox * 3 + 3; x++)
             {
-                for(int y = yBox*3; y < yBox*3+3; y++)
+                for (int y = yBox * 3; y < yBox * 3 + 3; y++)
                 {
-                    if(x == i && y == j)
+                    if (x == i && y == j)
                     {
                         continue;
                     }
-                    if(IntGrid[x,y] == n)
+                    if (IntGrid[x, y] == n)
                     {
                         return false;
                     }
@@ -172,7 +178,7 @@ namespace Sudoku
 
         private void InitCandidates()
         {
-            CandidatesGrid = new LinkedList<int>[9,9];
+            CandidatesGrid = new LinkedList<int>[9, 9];
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -184,17 +190,17 @@ namespace Sudoku
 
         public void FindCandidates()
         {
-            for(int x = 0; x < 9; x++)
+            for (int x = 0; x < 9; x++)
             {
-                for(int y = 0; y < 9; y++)
+                for (int y = 0; y < 9; y++)
                 {
-                    for(int n = 1; n < 10; n++)
+                    for (int n = 1; n < 10; n++)
                     {
                         if (IntGrid[x, y] != 0)
                             continue;
 
-                        if(CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
-                        { 
+                        if (CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
+                        {
                             CandidatesGrid[x, y].AddLast(n);
                             Console.WriteLine("Aggiungo {0}, in {1},{2}", n, x, y);
                         }
@@ -209,12 +215,167 @@ namespace Sudoku
             {
                 for (int y = 0; y < 9; y++)
                 {
-                    if(CandidatesGrid[x,y].Count == 1)
+                    if (CandidatesGrid[x, y].Count == 1)
                     {
                         int n = CandidatesGrid[x, y].First();
                         IntGrid[x, y] = n;
                         CandidatesGrid[x, y].RemoveFirst();
                         Console.WriteLine("Fisso {0}, in {1},{2}", n, x, y);
+                    }
+                }
+            }
+        }
+
+        public void FixRemainders()
+        {
+            // Controllo se nelle righe orizzontali manca un solo numero
+            // e nel caso lo inserisco.
+            for (int i = 0; i < 9; i++)
+            {
+                int zeroes = 0;
+                for (int j = 0; j < 9; j++)
+                {
+                    if (IntGrid[i, j] == 0)
+                    {
+                        zeroes++;
+                    }
+                }
+
+                if (zeroes == 1)
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        if (IntGrid[i, j] == 0)
+                        {
+                            bool found = false;
+                            for (int n = 1; n <= 9; n++)
+                            {
+                                for (int y = 0; y < 9; y++)
+                                {
+                                    if (n == IntGrid[i, y])
+                                    {
+                                        found = true;
+                                    }
+                                }
+                                if (!found)
+                                {
+                                    IntGrid[i, j] = n;
+                                    break;
+                                } else
+                                {
+                                    found = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+            //Controllo se nelle colonne verticali manca un solo numero
+            // e nel caso lo inserisco.
+            for (int j = 0; j < 9; j++)
+            {
+                int zeroes = 0;
+                for (int i = 0; i < 9; i++)
+                {
+                    if (IntGrid[i, j] == 0)
+                    {
+                        zeroes++;
+                    }
+                }
+
+                if (zeroes == 1)
+                {
+                    for (int i = 0; i < 9; i++)
+                    {
+                        if (IntGrid[i, j] == 0)
+                        {
+                            bool found = false;
+                            for (int n = 1; n <= 9; n++)
+                            {
+                                for (int x = 0; x < 9; x++)
+                                {
+                                    if (n == IntGrid[x, j])
+                                    {
+                                        found = true;
+                                    }
+                                }
+                                if (!found)
+                                {
+                                    IntGrid[i, j] = n;
+                                    break;
+                                } else
+                                {
+                                    found = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+            // Controllo se nel box manca un solo numero....
+            // e nel caso lo inserisco.
+            for (int xBox = 0; xBox < 3; xBox++)
+            {
+                for (int yBox = 0; yBox < 3; yBox++)
+                {
+                    int zeroes = 0;
+                    for (int x = xBox * 3; x < xBox * 3 + 3; x++)
+                    {
+                        for (int y = yBox * 3; y < yBox * 3 + 3; y++)
+                        {
+                            if (IntGrid[x, y] == 0)
+                            {
+                                zeroes++;
+                            }
+                        }
+                    }
+
+                    if (zeroes == 1)
+                    {
+                        for (int x = xBox * 3; x < xBox * 3 + 3; x++)
+                        {
+                            for (int y = yBox * 3; y < yBox * 3 + 3; y++)
+                            {
+                                if (IntGrid[x, y] == 0)
+                                {
+                                    for (int n = 1; n <= 9; n++)
+                                    {
+                                        bool found = false;
+                                        for (int i = xBox * 3; i < xBox * 3 + 3; i++)
+                                        {
+                                            for (int j = yBox * 3; j < yBox * 3 + 3; j++)
+                                            {
+                                               if(IntGrid[i,j] == n)
+                                                {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (found)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                        if(!found)
+                                        {
+                                            IntGrid[x, y] = n;
+                                        } else
+                                        {
+                                            found = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
