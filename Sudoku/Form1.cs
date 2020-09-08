@@ -157,7 +157,26 @@ namespace Sudoku
             this.Sudoku.Grid[5, 8].Text = "8";
 
 
+            this.Sudoku.Grid[6, 4].Text = "3";
+            this.Sudoku.Grid[6, 5].Text = "2";
 
+            this.Sudoku.Grid[6, 8].Text = "7";
+
+
+            this.Sudoku.Grid[7, 0].Text = "1";
+            this.Sudoku.Grid[7, 1].Text = "2";
+
+            this.Sudoku.Grid[7, 4].Text = "9";
+
+            this.Sudoku.Grid[7, 8].Text = "3";
+
+
+            this.Sudoku.Grid[8, 1].Text = "3";
+
+            this.Sudoku.Grid[8, 5].Text = "4";
+
+            this.Sudoku.Grid[8, 6].Text = "9";
+            this.Sudoku.Grid[8, 7].Text = "2";
         }
 
         private void button1_Click(object sender, EventArgs e)
