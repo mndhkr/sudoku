@@ -22,7 +22,7 @@ namespace Sudoku
 
             AssociateTextBoxes();
 
-            PrepareForTestMedium();
+            PrepareForTestDifficult();
         }
 
         private void AssociateTextBoxes()
@@ -218,6 +218,50 @@ namespace Sudoku
             this.Sudoku.Grid[8, 2].Text = "3";
             this.Sudoku.Grid[8, 4].Text = "5";
             this.Sudoku.Grid[8, 8].Text = "7";
+        }
+
+        private void PrepareForTestDifficult()
+        {
+            this.Sudoku.Grid[0, 0].Text = "8";
+            this.Sudoku.Grid[0, 6].Text = "4";
+            this.Sudoku.Grid[0, 8].Text = "9";
+
+            this.Sudoku.Grid[1, 4].Text = "4";
+            this.Sudoku.Grid[1, 5].Text = "3";
+            this.Sudoku.Grid[1, 6].Text = "7";
+
+            this.Sudoku.Grid[2, 5].Text = "9";
+            this.Sudoku.Grid[2, 6].Text = "6";
+            this.Sudoku.Grid[2, 7].Text = "5";
+            this.Sudoku.Grid[2, 8].Text = "2";
+
+            this.Sudoku.Grid[3, 4].Text = "3";
+            this.Sudoku.Grid[3, 5].Text = "4";
+            this.Sudoku.Grid[3, 6].Text = "1";
+            this.Sudoku.Grid[3, 7].Text = "9";
+
+            this.Sudoku.Grid[4, 1].Text = "5";
+            this.Sudoku.Grid[4, 3].Text = "8";
+            this.Sudoku.Grid[4, 5].Text = "6";
+            this.Sudoku.Grid[4, 7].Text = "2";
+
+            this.Sudoku.Grid[5, 1].Text = "3";
+            this.Sudoku.Grid[5, 2].Text = "1";
+            this.Sudoku.Grid[5, 3].Text = "9";
+            this.Sudoku.Grid[5, 4].Text = "5";
+
+            this.Sudoku.Grid[6, 0].Text = "4";
+            this.Sudoku.Grid[6, 1].Text = "2";
+            this.Sudoku.Grid[6, 2].Text = "9";
+            this.Sudoku.Grid[6, 3].Text = "3";
+
+            this.Sudoku.Grid[7, 2].Text = "7";
+            this.Sudoku.Grid[7, 3].Text = "4";
+            this.Sudoku.Grid[7, 4].Text = "9";
+
+            this.Sudoku.Grid[8, 0].Text = "5";
+            this.Sudoku.Grid[8, 2].Text = "6";
+            this.Sudoku.Grid[8, 8].Text = "3";
         }
 
         private void button1_Click(object sender, EventArgs e)
