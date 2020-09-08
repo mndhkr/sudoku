@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -82,7 +83,18 @@ namespace Sudoku
                 FixCandidates();
                 PrintIntGrid();
                 Console.WriteLine();
+                InitCandidates();
+                FindCandidates();
                 FixRemainders();
+                InitCandidates();
+                FindCandidates();
+                FixCandidates();
+                PrintIntGrid();
+                Console.WriteLine();
+                FillMandatory();
+                InitCandidates();
+                FindCandidates();
+                FixCandidates();
                 if (!hasCandidates())
                     break;
                 InitCandidates();
@@ -264,6 +276,7 @@ namespace Sudoku
                                 if (!found)
                                 {
                                     IntGrid[i, j] = n;
+                                    CandidatesGrid[i, j].Clear();
                                     Console.WriteLine("Fisso Mancante Riga: {0} in {1},{2}", n, i, j);
                                     stop = true;
                                     break;
@@ -313,6 +326,7 @@ namespace Sudoku
                                 if (!found)
                                 {
                                     IntGrid[i, j] = n;
+                                    CandidatesGrid[i, j].Clear();
                                     Console.WriteLine("Fisso Mancante Colonna: {0} in {1},{2}", n, i, j);
                                     stop = true;
                                     break;
@@ -376,6 +390,7 @@ namespace Sudoku
                                         if(!found)
                                         {
                                             IntGrid[x, y] = n;
+                                            CandidatesGrid[x, y].Clear();
                                             Console.WriteLine("Fisso Box: {0} in {1},{2}", n, x, y);
                                             stop = true;
                                             break;
@@ -390,6 +405,108 @@ namespace Sudoku
                     }
                 }
             }
+        }
+
+        private void FillMandatoryInBox()
+        {
+            for (int n = 0; n <= 9; n++)
+            {
+                for (int xBox = 0; xBox < 3; xBox++)
+                {
+                    int count = 0;
+                    int _x = 0, _y = 0;
+                    for (int yBox = 0; yBox < 3; yBox++)
+                    {
+                        for (int x = xBox * 3; x < xBox * 3 + 3; x++)
+                        {
+                            for (int y = yBox * 3; y < yBox * 3 + 3; y++)
+                            {
+                                if (IntGrid[x,y] == 0 && CandidatesGrid[x, y].Contains(n))
+                                {
+                                    count++;
+                                    _x = x;
+                                    _y = y;
+                                }
+                            }
+                        }
+                    }
+                    if (count == 1)
+                    {
+                        IntGrid[_x, _y] = n;
+                        CandidatesGrid[_x, _y].Clear();
+                        Console.WriteLine("Fisso Box unico valido: {0} in {1},{2}", n, _x, _y);
+                    }
+                }
+            }
+        }
+
+        private void FillMandatoryinLine()
+        {
+            for(int n = 1; n <=9; n++)
+            {
+                int count = 0;
+                int x = 0, y = 0;
+
+                for (int i = 0; i < 9; i++)
+                {
+                    for(int j = 0; j < 9; j++)
+                    {
+                        if(IntGrid[i,j] == 0 && CandidatesGrid[i,j].Contains(n))
+                        {
+                            count++;
+                            x = i;
+                            y = j;
+                        }
+                    }
+                }
+
+                if (count == 1)
+                {
+                    IntGrid[x, y] = n;
+                    CandidatesGrid[x, y].Clear();
+                    Console.WriteLine("Fisso Riga unico valido: {0} in {1},{2}", n, x, y);
+                }
+            }
+        }
+
+        private void FillMandatoryinColumn()
+        {
+            for (int n = 1; n <= 9; n++)
+            {
+                int count = 0;
+                int x = 0, y = 0;
+
+                for (int j = 0; j < 9; j++)
+                {
+                    for (int i = 0; i < 9; i++)
+                    {
+                        if (IntGrid[i, j] == 0 && CandidatesGrid[i, j].Contains(n))
+                        {
+                            count++;
+                            x = i;
+                            y = j;
+                        }
+                    }
+                }
+                if (count == 1)
+                {
+                    IntGrid[x, y] = n;
+                    CandidatesGrid[x, y].Clear();
+                    Console.WriteLine("Fisso Colonna unico valido: {0} in {1},{2}", n, x, y);
+                }
+            }
+        }
+
+        private void FillMandatory()
+        {
+            FillMandatoryinColumn();
+            FillMandatoryinLine();
+            FillMandatoryInBox();
+        }
+
+        private void FixOnlyPossibleIn(int i, int j)
+        {
+
         }
     }
 }
