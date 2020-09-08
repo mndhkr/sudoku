@@ -13,6 +13,13 @@ namespace Sudoku
         private Int32[,] IntGrid { get; set; }
         private LinkedList<int>[,] CandidatesGrid { get; set; }
 
+        public Sudoku()
+        {
+            Grid = new TextBox[9, 9];
+            IntGrid = new int[9,9];
+            InitCandidates();
+        }
+
         public int GetValue(TextBox t)
         {
             int value = 0;
@@ -41,20 +48,57 @@ namespace Sudoku
             }
         }
 
-        public void Solve()
+        public void printIntGrid()
         {
-            CandidatesGrid = new LinkedList<int>[9, 9];
-
-
-            for (int i = 0; i < 9; i++)
+            for(int i = 0; i < 9; i++)
             {
-                for (int j = 0; j < 9; j++)
+                for(int j = 0; j < 9; j++)
                 {
-                    CandidatesGrid[i, j] = new LinkedList<int>();
+                    Console.Write(IntGrid[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private void CopyIntToTextBoxes()
+        {
+            for (int x = 0; x < 9; x++)
+            {
+                for (int y = 0; y < 9; y++)
+                {
+                    Grid[x, y].Text = IntGrid[x, y].ToString();
                 }
             }
+        }
 
-            FindCandidates();
+        public void Solve()
+        {
+            IntGridFromTextBoxes();
+            for (int i = 0; i < 100; i++)
+            {
+                printIntGrid();
+                FindCandidates();
+                FixCandidates();
+                if (!hasCandidates())
+                    break;
+                InitCandidates();
+            }
+            CopyIntToTextBoxes();
+        }
+
+        public bool hasCandidates()
+        {
+            for (int x = 0; x < 9; x++)
+            {
+                for (int y = 0; y < 9; y++)
+                {
+                    if(CandidatesGrid[x,y].Count > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public bool CheckOrizontal(int n, int i, int j)
@@ -75,7 +119,7 @@ namespace Sudoku
             for (int x = 0; x < 9; x++)
             {
                 if (x == i) continue;
-                if (n == IntGrid[j, x])
+                if (n == IntGrid[x, j])
                 {
                     return false;
                 }
@@ -126,6 +170,18 @@ namespace Sudoku
             return true;
         }
 
+        private void InitCandidates()
+        {
+            CandidatesGrid = new LinkedList<int>[9,9];
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    CandidatesGrid[i, j] = new LinkedList<int>();
+                }
+            }
+        }
+
         public void FindCandidates()
         {
             for(int x = 0; x < 9; x++)
@@ -134,11 +190,31 @@ namespace Sudoku
                 {
                     for(int n = 1; n < 10; n++)
                     {
+                        if (IntGrid[x, y] != 0)
+                            continue;
+
                         if(CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
-                        {
+                        { 
                             CandidatesGrid[x, y].AddLast(n);
-                            Console.WriteLine("Aggiungo {}, in {},{}", n, x, y);
+                            Console.WriteLine("Aggiungo {0}, in {1},{2}", n, x, y);
                         }
+                    }
+                }
+            }
+        }
+
+        public void FixCandidates()
+        {
+            for (int x = 0; x < 9; x++)
+            {
+                for (int y = 0; y < 9; y++)
+                {
+                    if(CandidatesGrid[x,y].Count == 1)
+                    {
+                        int n = CandidatesGrid[x, y].First();
+                        IntGrid[x, y] = n;
+                        CandidatesGrid[x, y].RemoveFirst();
+                        Console.WriteLine("Fisso {0}, in {1},{2}", n, x, y);
                     }
                 }
             }

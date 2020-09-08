@@ -19,7 +19,6 @@ namespace Sudoku
             InitializeComponent();
 
             Sudoku = new Sudoku();
-            Sudoku.Grid = new TextBox[9, 9];
 
             this.Sudoku.Grid[0, 0] = textBox1;
             this.Sudoku.Grid[0, 1] = textBox2;
@@ -181,7 +180,7 @@ namespace Sudoku
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Sudoku.Solve();
         }
     }
 }
