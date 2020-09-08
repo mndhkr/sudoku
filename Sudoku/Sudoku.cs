@@ -11,7 +11,7 @@ namespace Sudoku
     {
         public TextBox[,] Grid { get; set; }
         private Int32[,] IntGrid { get; set; }
-        private LinkedList<int>[,] SolutionGrid { get; set; }
+        private LinkedList<int>[,] CandidatesGrid { get; set; }
 
         public int GetValue(TextBox t)
         {
@@ -43,16 +43,18 @@ namespace Sudoku
 
         public void Solve()
         {
-            SolutionGrid = new LinkedList<int>[9, 9];
+            CandidatesGrid = new LinkedList<int>[9, 9];
 
 
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    SolutionGrid[i, j] = new LinkedList<int>();
+                    CandidatesGrid[i, j] = new LinkedList<int>();
                 }
             }
+
+            FindCandidates();
         }
 
         public bool CheckOrizontal(int n, int i, int j)
@@ -124,5 +126,22 @@ namespace Sudoku
             return true;
         }
 
+        public void FindCandidates()
+        {
+            for(int x = 0; x < 9; x++)
+            {
+                for(int y = 0; y < 9; y++)
+                {
+                    for(int n = 1; n < 10; n++)
+                    {
+                        if(CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
+                        {
+                            CandidatesGrid[i, j].AddLast(n);
+                            Console.WriteLine("Aggiungo {}, in {},{}", n, x, y);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
