@@ -971,7 +971,8 @@ namespace Sudoku
                     return false;
                 for (int j = 0; j < 9; j++)
                 {
-                    Grid[i, j].Text = strings[i].Substring(j, 1);
+                    string n = strings[i].Substring(j, 1);
+                    Grid[i, j].Text = (n == "0") ? "" : n;
                 }
             }
             return true;

@@ -546,6 +546,17 @@ namespace Sudoku
             this.Sudoku.Grid[8, 8].Text = "5";
         }
 
+        private void ResetColorsToBlack()
+        {
+            for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j < 9; j++)
+                {
+                    this.Sudoku.Grid[i, j].ForeColor = Color.Black;
+                }
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             Sudoku.Solve();
@@ -601,6 +612,7 @@ namespace Sudoku
                     MessageBox.Show("Errore durante il caricamento del file");
                 }
             }
+            this.ResetColorsToBlack();
         }
     }
 }
