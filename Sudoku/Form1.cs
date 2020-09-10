@@ -18,6 +18,8 @@ namespace Sudoku
     {
         public Sudoku Sudoku { get; set; }
 
+        private string FileName { get; set; }
+
         public Form1()
         {
             InitializeComponent();
@@ -643,6 +645,18 @@ namespace Sudoku
                 {
                     MessageBox.Show("Errore durante il caricamento del file");
                 }
+            }
+            this.ResetColorsToBlack();
+            this.FileName = ofd.FileName;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string sudoku = File.ReadAllText(this.FileName);
+            var loaded = this.Sudoku.LoadFromString(sudoku);
+            if (!loaded)
+            {
+                MessageBox.Show("Errore durante il caricamento del file");
             }
             this.ResetColorsToBlack();
         }

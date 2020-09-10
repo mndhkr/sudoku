@@ -153,6 +153,11 @@ namespace Sudoku
             IntGridFromTextBoxes();
             PrintIntGrid();
 
+            if(!CheckCoherence())
+            {
+                MessageBox.Show("Incoerenza nella griglia di partenza");
+            }
+
             for (int i = 0; i < 100; i++)
             {
 
@@ -285,10 +290,14 @@ namespace Sudoku
                 {
                     if (CandidatesGrid[x, y].Count > 1)
                     {
-                        IntGrid[x, y] = CandidatesGrid[x, y].ElementAt((new Random()).Next(0, CandidatesGrid[x, y].Count - 1));
-                        CandidatesGrid[x, y].Clear();
-                        Console.WriteLine("Provo con {0}, in {1},{2}", IntGrid[x, y], x + 1, y + 1);
-                        return;
+                        int n = CandidatesGrid[x, y].ElementAt((new Random()).Next(0, CandidatesGrid[x, y].Count - 1));
+                        if (CheckCoherence(n, x, y))
+                        {
+                            IntGrid[x, y] = n;
+                            CandidatesGrid[x, y].Clear();
+                            Console.WriteLine("Provo con {0}, in {1},{2}", IntGrid[x, y], x + 1, y + 1);
+                            return;
+                        }
                     }
                 }
             }
@@ -397,9 +406,12 @@ namespace Sudoku
                     if (CandidatesGrid[x, y].Count == 1)
                     {
                         int n = CandidatesGrid[x, y].First();
-                        IntGrid[x, y] = n;
-                        CandidatesGrid[x, y].Clear();
-                        Console.WriteLine("Fisso da Candidati: {0}, in {1},{2}", n, x + 1, y + 1);
+                        if (CheckCoherence(n, x, y))
+                        {
+                            IntGrid[x, y] = n;
+                            CandidatesGrid[x, y].Clear();
+                            Console.WriteLine("Fisso da Candidati: {0}, in {1},{2}", n, x + 1, y + 1);
+                        }
                     }
                 }
             }
@@ -438,7 +450,7 @@ namespace Sudoku
                                         found = true;
                                     }
                                 }
-                                if (!found)
+                                if (!found && CheckCoherence(n, i, j))
                                 {
                                     IntGrid[i, j] = n;
                                     CandidatesGrid[i, j].Clear();
@@ -492,7 +504,7 @@ namespace Sudoku
                                         found = true;
                                     }
                                 }
-                                if (!found)
+                                if (!found && CheckCoherence(n, i, j))
                                 {
                                     IntGrid[i, j] = n;
                                     CandidatesGrid[i, j].Clear();
@@ -561,7 +573,7 @@ namespace Sudoku
                                                 break;
                                             }
                                         }
-                                        if (!found)
+                                        if (!found && CheckCoherence(n, x, y))
                                         {
                                             IntGrid[x, y] = n;
                                             CandidatesGrid[x, y].Clear();
@@ -608,7 +620,7 @@ namespace Sudoku
                             }
                         }
 
-                        if (count == 1)
+                        if (count == 1 && CheckCoherence(n, _x, _y))
                         {
                             IntGrid[_x, _y] = n;
                             CandidatesGrid[_x, _y].Clear();
@@ -639,7 +651,7 @@ namespace Sudoku
                     }
                 }
 
-                if (count == 1)
+                if (count == 1 && CheckCoherence(n, x, y))
                 {
                     IntGrid[x, y] = n;
                     CandidatesGrid[x, y].Clear();
@@ -667,7 +679,7 @@ namespace Sudoku
                         }
                     }
                 }
-                if (count == 1)
+                if (count == 1 && CheckCoherence(n, x, y))
                 {
                     IntGrid[x, y] = n;
                     CandidatesGrid[x, y].Clear();
@@ -737,8 +749,11 @@ namespace Sudoku
                     {
                         if (CheckNumberInSlot(n, i, j))
                         {
-                            Console.WriteLine("Controllo ed inserisco {0} in {1},{2}", n, i, j);
-                            IntGrid[i, j] = n;
+                            if (CheckCoherence(n, i, j))
+                            {
+                                Console.WriteLine("Controllo ed inserisco {0} in {1},{2}", n, i, j);
+                                IntGrid[i, j] = n;
+                            }
                         }
                         else
                         {
@@ -823,7 +838,8 @@ namespace Sudoku
                             {
                                 if (CheckNumberInSlot(n, i, j))
                                 {
-                                    IntGrid[i, j] = n;
+                                    if (CheckCoherence(n, i, j))
+                                        IntGrid[i, j] = n;
                                 }
                             }
                         }
@@ -858,13 +874,26 @@ namespace Sudoku
                             {
                                 if (CheckNumberInSlot(n, i, j))
                                 {
-                                    IntGrid[i, j] = n;
+                                    if (CheckCoherence(n, i, j))
+                                    {
+                                        IntGrid[i, j] = n;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+
+        public bool CheckCoherence(int n, int i, int j)
+        {
+            if (!CheckHorizontalCoherence(n, i, j) || !CheckVerticalCoherence(n, i, j) || !CheckBoxCoherence(n, i, j))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public bool CheckCoherence()
@@ -875,7 +904,9 @@ namespace Sudoku
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (!CheckHorizontalCoherence(i, j) || !CheckVerticalCoherence(i, j) || !CheckBoxCoherence(i, j))
+                    int n = IntGrid[i, j];
+                    if (n == 0) continue;
+                    if (!CheckHorizontalCoherence(n, i, j) || !CheckVerticalCoherence(n, i, j) || !CheckBoxCoherence(n, i, j))
                     {
                         Grid[i, j].ForeColor = Color.Red;
                         return false;
@@ -886,9 +917,8 @@ namespace Sudoku
             return true;
         }
 
-        private bool CheckHorizontalCoherence(int i, int j)
+        private bool CheckHorizontalCoherence(int n, int i, int j)
         {
-            int n = IntGrid[i, j];
             for (int y = 0; y < 9; y++)
             {
                 if (j == y)
@@ -902,9 +932,8 @@ namespace Sudoku
             return true;
         }
 
-        private bool CheckVerticalCoherence(int i, int j)
+        private bool CheckVerticalCoherence(int n, int i, int j)
         {
-            int n = IntGrid[i, j];
             for (int x = 0; x < 9; x++)
             {
                 if (x == i)
@@ -918,10 +947,8 @@ namespace Sudoku
             return true;
         }
 
-        private bool CheckBoxCoherence(int i, int j)
+        private bool CheckBoxCoherence(int n, int i, int j)
         {
-            int n = IntGrid[i, j];
-
             int xBox = i / 3;
             int yBox = j / 3;
 
