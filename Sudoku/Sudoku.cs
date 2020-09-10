@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,9 +66,15 @@ namespace Sudoku
             {
                 for (int j = 0; j < 9; j++)
                 {
+                    if (j % 3 == 0)
+                        Console.Write(" ");
                     Console.Write(IntGrid[i, j]);
                 }
                 Console.WriteLine();
+                if((i+1) % 3 == 0)
+                {
+                    Console.WriteLine();
+                }
             }
         }
 
@@ -142,15 +149,16 @@ namespace Sudoku
         public void Solve()
         {
             IntGridFromTextBoxes();
+            PrintIntGrid();
+
             for (int i = 0; i < 100; i++)
             {
-                PrintIntGrid();
-
+                Console.WriteLine("Iterazione n° {0}", i);
                 FindCandidates();
                 FixCandidates();
 
-                PrintIntGrid();
-                Console.WriteLine();
+                //PrintIntGrid();
+                //Console.WriteLine();
 
                 InitCandidates();
                 FindCandidates();
@@ -173,8 +181,8 @@ namespace Sudoku
                 FindCandidates();
                 FixCandidates();
 
-                PrintIntGrid();
-                Console.WriteLine();
+                //PrintIntGrid();
+                //Console.WriteLine();
 
                 FillMandatoryinColumn();
 
@@ -220,6 +228,7 @@ namespace Sudoku
                 InitCandidates();
                 CopyIntToTextBoxes();
             }
+            PrintIntGrid();
 
         }
 
@@ -357,7 +366,7 @@ namespace Sudoku
                         if (CheckOrizontal(n, x, y) && CheckVertical(n, x, y) && CheckBox(n, x, y))
                         {
                             CandidatesGrid[x, y].AddLast(n);
-                            Console.WriteLine("Candidato: {0}, in {1},{2}", n, x + 1, y + 1);
+                            //Console.WriteLine("Candidato: {0}, in {1},{2}", n, x + 1, y + 1);
                         }
                     }
                 }
@@ -374,7 +383,7 @@ namespace Sudoku
                     {
                         int n = CandidatesGrid[x, y].First();
                         IntGrid[x, y] = n;
-                        CandidatesGrid[x, y].RemoveFirst();
+                        CandidatesGrid[x, y].Clear();
                         Console.WriteLine("Fisso da Candidati: {0}, in {1},{2}", n, x + 1, y + 1);
                     }
                 }
@@ -576,7 +585,7 @@ namespace Sudoku
                             {
                                 if (IntGrid[x, y] == 0 && CandidatesGrid[x, y].Contains(n))
                                 {
-                                    Console.WriteLine("CandidatesGrid[{0},{1}].Contains({2}).", x + 1, y + 1, n);
+                                    //Console.WriteLine("CandidatesGrid[{0},{1}].Contains({2}).", x + 1, y + 1, n);
                                     count++;
                                     _x = x;
                                     _y = y;
@@ -662,6 +671,36 @@ namespace Sudoku
         private void FixOnlyPossibleIn(int i, int j)
         {
 
+        }
+
+        private bool CheckNumberInSlot(int n, int i, int j)
+        {
+            for(int x = 0; x < 9; x++)
+            {
+                if (IntGrid[x, j] == n)
+                    return false;
+            }
+
+
+            for(int y = 0; y < 9; y++)
+            {
+                if (IntGrid[i, y] == n)
+                    return false;
+            }
+
+            int xBox = i / 3;
+            int yBox = j / 3;
+
+            for(int x = xBox*3; x < xBox*3+3; x++)
+            {
+                for(int y = yBox*3; y < yBox*3+3; y++)
+                {
+                    if (IntGrid[x, y] == n)
+                        return false;
+                }
+            }
+
+            return true;
         }
     }
 }
