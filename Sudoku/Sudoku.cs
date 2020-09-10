@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -84,7 +85,7 @@ namespace Sudoku
             {
                 for (int y = 0; y < 9; y++)
                 {
-                    Grid[x, y].Text = (IntGrid[x, y] == 0) ? "X" : IntGrid[x, y].ToString();
+                    Grid[x, y].Text = (IntGrid[x, y] == 0) ? "" : IntGrid[x, y].ToString();
                 }
             }
         }
@@ -749,7 +750,7 @@ namespace Sudoku
 
         private bool LineContains(int n, int line)
         {
-            for(int j = 0; j < 9; j++)
+            for (int j = 0; j < 9; j++)
             {
                 if (IntGrid[line, j] == n)
                     return true;
@@ -769,7 +770,7 @@ namespace Sudoku
         {
             LinkedList<int> missing = new LinkedList<int>();
 
-            for(int n = 1; n <10; n++)
+            for (int n = 1; n < 10; n++)
             {
                 if (!LineContains(n, line))
                 {
@@ -800,7 +801,8 @@ namespace Sudoku
             for (int j = 0; j < 9; j++)
             {
                 var missing = GetMissingFromColumn(j);
-                foreach (var n in missing) {
+                foreach (var n in missing)
+                {
                     int count = 0;
                     for (int i = 0; i < 9; i++)
                     {
@@ -812,7 +814,7 @@ namespace Sudoku
                             }
                         }
                     }
-                    if(count == 1)
+                    if (count == 1)
                     {
                         for (int i = 0; i < 9; i++)
                         {
@@ -862,6 +864,83 @@ namespace Sudoku
                     }
                 }
             }
+        }
+
+        public bool CheckCoherence()
+        {
+            IntGridFromTextBoxes();
+
+            for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j <9; j++)
+                {
+                    if(!CheckHorizontalCoherence(i,j) || !CheckVerticalCoherence(i,j) || !CheckBoxCoherence(i,j))
+                    {
+                        Grid[i, j].ForeColor=Color.Red;
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool CheckHorizontalCoherence(int i, int j)
+        {
+            int n = IntGrid[i, j];
+            for (int y = 0; y < 9; y++)
+            {
+                if (j == y)
+                    continue;
+
+                if (IntGrid[i, y] == n)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool CheckVerticalCoherence(int i, int j)
+        {
+            int n = IntGrid[i, j];
+            for (int x = 0; x < 9; x++)
+            {
+                if (x == i)
+                    continue;
+
+                if (IntGrid[x, j] == n)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool CheckBoxCoherence(int i, int j)
+        {
+            int n = IntGrid[i, j];
+
+            int xBox = i / 3;
+            int yBox = j / 3;
+
+            for (int x = xBox * 3; x < xBox * 3 + 3; x++)
+            {
+                for (int y = yBox * 3; y < yBox * 3 + 3; y++)
+                {
+                    if (x == i && y == j)
+                    {
+                        continue;
+                    }
+
+                    if (IntGrid[x, y] == n)
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            return true;
         }
     }
 }

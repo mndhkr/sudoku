@@ -22,7 +22,9 @@ namespace Sudoku
 
             AssociateTextBoxes();
 
-            PrepareForTestHard_30();
+            //PrepareForTestHard_30();
+            //PrepareForTestMediumHard();
+            PrepareForPeppe();
         }
 
         private void AssociateTextBoxes()
@@ -450,6 +452,99 @@ namespace Sudoku
             this.Sudoku.Grid[8, 8].Text = "5";
         }
 
+        private void PrepareForPeppe()
+        {
+            this.Sudoku.Grid[0, 0].Text = "1";
+            this.Sudoku.Grid[0, 1].Text = "3";
+            this.Sudoku.Grid[0, 2].Text = "6";
+            this.Sudoku.Grid[0, 3].Text = "2";
+            this.Sudoku.Grid[0, 4].Text = "5";
+            this.Sudoku.Grid[0, 5].Text = "7";
+            this.Sudoku.Grid[0, 6].Text = "8";
+            this.Sudoku.Grid[0, 7].Text = "4";
+            this.Sudoku.Grid[0, 8].Text = "9";
+
+            this.Sudoku.Grid[1, 0].Text = "2";
+            this.Sudoku.Grid[1, 1].Text = "7";
+            this.Sudoku.Grid[1, 2].Text = "5";
+            this.Sudoku.Grid[1, 3].Text = "9";
+            this.Sudoku.Grid[1, 4].Text = "8";
+            this.Sudoku.Grid[1, 5].Text = "4";
+            this.Sudoku.Grid[1, 6].Text = "6";
+            this.Sudoku.Grid[1, 7].Text = "3";
+            this.Sudoku.Grid[1, 8].Text = "1";
+
+            this.Sudoku.Grid[2, 0].Text = "8";
+            this.Sudoku.Grid[2, 1].Text = "4";
+            this.Sudoku.Grid[2, 2].Text = "9";
+            this.Sudoku.Grid[2, 3].Text = "6";
+            this.Sudoku.Grid[2, 4].Text = "1";
+            this.Sudoku.Grid[2, 5].Text = "3";
+            this.Sudoku.Grid[2, 6].Text = "5";
+            this.Sudoku.Grid[2, 7].Text = "2";
+            this.Sudoku.Grid[2, 8].Text = "7";
+
+            this.Sudoku.Grid[3, 0].Text = "7";
+            this.Sudoku.Grid[3, 1].Text = "5";
+            this.Sudoku.Grid[3, 2].Text = "1";
+            this.Sudoku.Grid[3, 3].Text = "8";
+            this.Sudoku.Grid[3, 4].Text = "3";
+            this.Sudoku.Grid[3, 5].Text = "2";
+            this.Sudoku.Grid[3, 6].Text = "4";
+            this.Sudoku.Grid[3, 7].Text = "9";
+            this.Sudoku.Grid[3, 8].Text = "6";
+
+            this.Sudoku.Grid[4, 0].Text = "6";
+            this.Sudoku.Grid[4, 1].Text = "9";
+            this.Sudoku.Grid[4, 2].Text = "3";
+            this.Sudoku.Grid[4, 3].Text = "7";
+            this.Sudoku.Grid[4, 4].Text = "4";
+            this.Sudoku.Grid[4, 5].Text = "5";
+            this.Sudoku.Grid[4, 6].Text = "1";
+            this.Sudoku.Grid[4, 7].Text = "8";
+            this.Sudoku.Grid[4, 8].Text = "2";
+
+            this.Sudoku.Grid[5, 0].Text = "4";
+            this.Sudoku.Grid[5, 1].Text = "8";
+            this.Sudoku.Grid[5, 2].Text = "2";
+            this.Sudoku.Grid[5, 3].Text = "1";
+            this.Sudoku.Grid[5, 4].Text = "9";
+            this.Sudoku.Grid[5, 5].Text = "6";
+            this.Sudoku.Grid[5, 6].Text = "7";
+            this.Sudoku.Grid[5, 7].Text = "5";
+            this.Sudoku.Grid[5, 8].Text = "3";
+
+            this.Sudoku.Grid[6, 0].Text = "5";
+            this.Sudoku.Grid[6, 1].Text = "1";
+            this.Sudoku.Grid[6, 2].Text = "7";
+            this.Sudoku.Grid[6, 3].Text = "3";
+            this.Sudoku.Grid[6, 4].Text = "2";
+            this.Sudoku.Grid[6, 5].Text = "8";
+            this.Sudoku.Grid[6, 6].Text = "9";
+            this.Sudoku.Grid[6, 7].Text = "6";
+            this.Sudoku.Grid[6, 8].Text = "4";
+
+            this.Sudoku.Grid[7, 0].Text = "9";
+            this.Sudoku.Grid[7, 1].Text = "2";
+            this.Sudoku.Grid[7, 2].Text = "4";
+            this.Sudoku.Grid[7, 3].Text = "5";
+            this.Sudoku.Grid[7, 4].Text = "6";
+            this.Sudoku.Grid[7, 5].Text = "1";
+            this.Sudoku.Grid[7, 6].Text = "3";
+            this.Sudoku.Grid[7, 7].Text = "7";
+            this.Sudoku.Grid[7, 8].Text = "8";
+
+            this.Sudoku.Grid[8, 0].Text = "3";
+            this.Sudoku.Grid[8, 1].Text = "6";
+            this.Sudoku.Grid[8, 2].Text = "8";
+            this.Sudoku.Grid[8, 3].Text = "4";
+            this.Sudoku.Grid[8, 4].Text = "7";
+            this.Sudoku.Grid[8, 5].Text = "9";
+            this.Sudoku.Grid[8, 6].Text = "2";
+            this.Sudoku.Grid[8, 7].Text = "1";
+            this.Sudoku.Grid[8, 8].Text = "5";
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             Sudoku.Solve();
@@ -467,6 +562,17 @@ namespace Sudoku
                 {
                     this.Sudoku.Grid[x, y].Text = "";
                 }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(this.Sudoku.CheckCoherence())
+            {
+                MessageBox.Show("Complimenti! Il Soduko risulta privo di incoerenze!");
+            } else
+            {
+                MessageBox.Show("Mi spiace ma c'è sicuramente un errore da qualche parte.\nControlla meglio :-)");
             }
         }
     }
