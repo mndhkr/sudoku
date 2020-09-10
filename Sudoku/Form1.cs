@@ -7,7 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sudoku
 {
@@ -23,10 +26,37 @@ namespace Sudoku
 
             AssociateTextBoxes();
 
+            SetTextBoxes();
+
             PrepareForTestHard_30();
             //PrepareForTestMediumHard();
             //PrepareForPeppe();
         }
+
+        private void SetTextBoxes()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    //this.Sudoku.Grid[i, j].TextChanged += OnKeyUp;
+                }
+            }
+        }
+
+        private void OnKeyUp(object sender, EventArgs e)
+        {
+            if (sender is TextBox)
+            {
+                TextBox tb = sender as TextBox;
+                if (tb.Text.Length == tb.MaxLength)
+                {
+                    SendKeys.SendWait("{TAB}");
+                }
+            }
+        }
+
+
 
         private void AssociateTextBoxes()
         {
@@ -371,7 +401,7 @@ namespace Sudoku
             this.Sudoku.Grid[0, 6].Text = "5";
             this.Sudoku.Grid[0, 7].Text = "0";
             this.Sudoku.Grid[0, 8].Text = "0";
-                                           
+
             this.Sudoku.Grid[1, 0].Text = "0";
             this.Sudoku.Grid[1, 1].Text = "3";
             this.Sudoku.Grid[1, 2].Text = "0";
@@ -381,7 +411,7 @@ namespace Sudoku
             this.Sudoku.Grid[1, 6].Text = "0";
             this.Sudoku.Grid[1, 7].Text = "0";
             this.Sudoku.Grid[1, 8].Text = "0";
-                                           
+
             this.Sudoku.Grid[2, 0].Text = "0";
             this.Sudoku.Grid[2, 1].Text = "0";
             this.Sudoku.Grid[2, 2].Text = "5";
@@ -391,7 +421,7 @@ namespace Sudoku
             this.Sudoku.Grid[2, 6].Text = "2";
             this.Sudoku.Grid[2, 7].Text = "0";
             this.Sudoku.Grid[2, 8].Text = "1";
-                                           
+
             this.Sudoku.Grid[3, 0].Text = "5";
             this.Sudoku.Grid[3, 1].Text = "0";
             this.Sudoku.Grid[3, 2].Text = "0";
@@ -401,7 +431,7 @@ namespace Sudoku
             this.Sudoku.Grid[3, 6].Text = "8";
             this.Sudoku.Grid[3, 7].Text = "0";
             this.Sudoku.Grid[3, 8].Text = "0";
-                                           
+
             this.Sudoku.Grid[4, 0].Text = "0";
             this.Sudoku.Grid[4, 1].Text = "7";
             this.Sudoku.Grid[4, 2].Text = "0";
@@ -411,7 +441,7 @@ namespace Sudoku
             this.Sudoku.Grid[4, 6].Text = "0";
             this.Sudoku.Grid[4, 7].Text = "3";
             this.Sudoku.Grid[4, 8].Text = "0";
-                                           
+
             this.Sudoku.Grid[5, 0].Text = "0";
             this.Sudoku.Grid[5, 1].Text = "0";
             this.Sudoku.Grid[5, 2].Text = "1";
@@ -421,7 +451,7 @@ namespace Sudoku
             this.Sudoku.Grid[5, 6].Text = "0";
             this.Sudoku.Grid[5, 7].Text = "0";
             this.Sudoku.Grid[5, 8].Text = "2";
-                                           
+
             this.Sudoku.Grid[6, 0].Text = "3";
             this.Sudoku.Grid[6, 1].Text = "0";
             this.Sudoku.Grid[6, 2].Text = "8";
@@ -431,7 +461,7 @@ namespace Sudoku
             this.Sudoku.Grid[6, 6].Text = "9";
             this.Sudoku.Grid[6, 7].Text = "0";
             this.Sudoku.Grid[6, 8].Text = "0";
-                                           
+
             this.Sudoku.Grid[7, 0].Text = "0";
             this.Sudoku.Grid[7, 1].Text = "0";
             this.Sudoku.Grid[7, 2].Text = "0";
@@ -441,7 +471,7 @@ namespace Sudoku
             this.Sudoku.Grid[7, 6].Text = "0";
             this.Sudoku.Grid[7, 7].Text = "1";
             this.Sudoku.Grid[7, 8].Text = "0";
-                                          
+
             this.Sudoku.Grid[8, 0].Text = "0";
             this.Sudoku.Grid[8, 1].Text = "0";
             this.Sudoku.Grid[8, 2].Text = "7";
@@ -548,9 +578,9 @@ namespace Sudoku
 
         private void ResetColorsToBlack()
         {
-            for(int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
-                for(int j = 0; j < 9; j++)
+                for (int j = 0; j < 9; j++)
                 {
                     this.Sudoku.Grid[i, j].ForeColor = Color.Black;
                 }
@@ -573,16 +603,18 @@ namespace Sudoku
                 for (int y = 0; y < 9; y++)
                 {
                     this.Sudoku.Grid[x, y].Text = "";
+                    this.ResetColorsToBlack();
                 }
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if(this.Sudoku.CheckCoherence())
+            if (this.Sudoku.CheckCoherence())
             {
-                MessageBox.Show("Complimenti! Il Soduko risulta privo di incoerenze!");
-            } else
+                MessageBox.Show("Complimenti! Il Sudoko risulta privo di incoerenze!");
+            }
+            else
             {
                 MessageBox.Show("Mi spiace ma c'è sicuramente un errore da qualche parte.\nControlla meglio :-)");
             }
@@ -592,7 +624,7 @@ namespace Sudoku
         {
             SaveFileDialog sfd = new SaveFileDialog();
             var result = sfd.ShowDialog();
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 string sudoku = this.Sudoku.PrepareForSave();
                 File.WriteAllText(sfd.FileName, sudoku);
@@ -603,11 +635,11 @@ namespace Sudoku
         {
             OpenFileDialog ofd = new OpenFileDialog();
             var result = ofd.ShowDialog();
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 string sudoku = File.ReadAllText(ofd.FileName);
                 var loaded = this.Sudoku.LoadFromString(sudoku);
-                if(!loaded)
+                if (!loaded)
                 {
                     MessageBox.Show("Errore durante il caricamento del file");
                 }
