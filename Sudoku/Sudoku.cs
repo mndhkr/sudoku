@@ -71,7 +71,7 @@ namespace Sudoku
                     Console.Write(IntGrid[i, j]);
                 }
                 Console.WriteLine();
-                if((i+1) % 3 == 0)
+                if ((i + 1) % 3 == 0)
                 {
                     Console.WriteLine();
                 }
@@ -153,6 +153,7 @@ namespace Sudoku
 
             for (int i = 0; i < 100; i++)
             {
+
                 Console.WriteLine("Iterazione n° {0}", i);
                 FindCandidates();
                 FixCandidates();
@@ -202,6 +203,18 @@ namespace Sudoku
                 FindCandidates();
                 FixCandidates();
 
+                FillColumns();
+
+                InitCandidates();
+                FindCandidates();
+                FixCandidates();
+
+                FillRows();
+
+                InitCandidates();
+                FindCandidates();
+                FixCandidates();
+
                 //if (!hasCandidates())
                 //    break;
                 //InitCandidates();
@@ -226,8 +239,8 @@ namespace Sudoku
                 //    Guess();
                 //}
                 InitCandidates();
-                CopyIntToTextBoxes();
             }
+            CopyIntToTextBoxes();
             PrintIntGrid();
 
         }
@@ -675,32 +688,180 @@ namespace Sudoku
 
         private bool CheckNumberInSlot(int n, int i, int j)
         {
-            for(int x = 0; x < 9; x++)
+            for (int x = 0; x < 9; x++)
             {
                 if (IntGrid[x, j] == n)
+                {
+                    Console.WriteLine("{0} non può stare in {1},{2} a causa di {3} in {4},{5}", n, i, j, IntGrid[x, j], x, j);
                     return false;
+                }
             }
 
 
-            for(int y = 0; y < 9; y++)
+            for (int y = 0; y < 9; y++)
             {
                 if (IntGrid[i, y] == n)
+                {
+                    Console.WriteLine("{0} non può stare in {1},{2} a causa di {3} in {4},{5}", n, i, j, IntGrid[i, y], i, y);
                     return false;
+                }
             }
 
             int xBox = i / 3;
             int yBox = j / 3;
 
-            for(int x = xBox*3; x < xBox*3+3; x++)
+            for (int x = xBox * 3; x < xBox * 3 + 3; x++)
             {
-                for(int y = yBox*3; y < yBox*3+3; y++)
+                for (int y = yBox * 3; y < yBox * 3 + 3; y++)
                 {
                     if (IntGrid[x, y] == n)
+                    {
+                        Console.WriteLine("{0} non può stare in {1},{2} a causa di {3} in {4},{5}", n, i, j, IntGrid[x, y], x, y);
                         return false;
+                    }
                 }
             }
 
             return true;
+        }
+
+        private void CheckAndFixWholeGrid()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    for (int n = 1; n < 10; n++)
+                    {
+                        if (CheckNumberInSlot(n, i, j))
+                        {
+                            Console.WriteLine("Controllo ed inserisco {0} in {1},{2}", n, i, j);
+                            IntGrid[i, j] = n;
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0} non può stare in {1},{2}", n, i, j);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool LineContains(int n, int line)
+        {
+            for(int j = 0; j < 9; j++)
+            {
+                if (IntGrid[line, j] == n)
+                    return true;
+            }
+            return false;
+        }
+        private bool ColumnContains(int n, int column)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (IntGrid[i, column] == n)
+                    return true;
+            }
+            return false;
+        }
+        private LinkedList<int> GetMissingFromLine(int line)
+        {
+            LinkedList<int> missing = new LinkedList<int>();
+
+            for(int n = 1; n <10; n++)
+            {
+                if (!LineContains(n, line))
+                {
+                    missing.AddLast(n);
+                }
+            }
+
+            return missing;
+        }
+
+        private LinkedList<int> GetMissingFromColumn(int column)
+        {
+            LinkedList<int> missing = new LinkedList<int>();
+
+            for (int n = 1; n < 10; n++)
+            {
+                if (!ColumnContains(n, column))
+                {
+                    missing.AddLast(n);
+                }
+            }
+
+            return missing;
+        }
+
+        private void FillColumns()
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                var missing = GetMissingFromColumn(j);
+                foreach (var n in missing) {
+                    int count = 0;
+                    for (int i = 0; i < 9; i++)
+                    {
+                        if (IntGrid[i, j] == 0)
+                        {
+                            if (CheckNumberInSlot(n, i, j))
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                    if(count == 1)
+                    {
+                        for (int i = 0; i < 9; i++)
+                        {
+                            if (IntGrid[i, j] == 0)
+                            {
+                                if (CheckNumberInSlot(n, i, j))
+                                {
+                                    IntGrid[i, j] = n;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FillRows()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                var missing = GetMissingFromLine(i);
+                foreach (var n in missing)
+                {
+                    int count = 0;
+                    for (int j = 0; j < 9; j++)
+                    {
+                        if (IntGrid[i, j] == 0)
+                        {
+                            if (CheckNumberInSlot(n, i, j))
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                    if (count == 1)
+                    {
+                        for (int j = 0; j < 9; j++)
+                        {
+                            if (IntGrid[i, j] == 0)
+                            {
+                                if (CheckNumberInSlot(n, i, j))
+                                {
+                                    IntGrid[i, j] = n;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
