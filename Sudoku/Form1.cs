@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,9 @@ namespace Sudoku
 
             AssociateTextBoxes();
 
-            //PrepareForTestHard_30();
+            PrepareForTestHard_30();
             //PrepareForTestMediumHard();
-            PrepareForPeppe();
+            //PrepareForPeppe();
         }
 
         private void AssociateTextBoxes()
@@ -573,6 +574,32 @@ namespace Sudoku
             } else
             {
                 MessageBox.Show("Mi spiace ma c'è sicuramente un errore da qualche parte.\nControlla meglio :-)");
+            }
+        }
+
+        private void salvaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            var result = sfd.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                string sudoku = this.Sudoku.PrepareForSave();
+                File.WriteAllText(sfd.FileName, sudoku);
+            }
+        }
+
+        private void caricaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            var result = ofd.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                string sudoku = File.ReadAllText(ofd.FileName);
+                var loaded = this.Sudoku.LoadFromString(sudoku);
+                if(!loaded)
+                {
+                    MessageBox.Show("Errore durante il caricamento del file");
+                }
             }
         }
     }

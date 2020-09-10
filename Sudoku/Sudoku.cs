@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -870,13 +871,13 @@ namespace Sudoku
         {
             IntGridFromTextBoxes();
 
-            for(int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
-                for(int j = 0; j <9; j++)
+                for (int j = 0; j < 9; j++)
                 {
-                    if(!CheckHorizontalCoherence(i,j) || !CheckVerticalCoherence(i,j) || !CheckBoxCoherence(i,j))
+                    if (!CheckHorizontalCoherence(i, j) || !CheckVerticalCoherence(i, j) || !CheckBoxCoherence(i, j))
                     {
-                        Grid[i, j].ForeColor=Color.Red;
+                        Grid[i, j].ForeColor = Color.Red;
                         return false;
                     }
                 }
@@ -938,6 +939,39 @@ namespace Sudoku
                         return false;
                     }
 
+                }
+            }
+            return true;
+        }
+
+        public string PrepareForSave()
+        {
+            string save = "";
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    save += (Grid[i, j].Text == "") ? "0" : Grid[i, j].Text;
+                }
+                save += "\n";
+            }
+            return save;
+        }
+
+        public bool LoadFromString(string sudoku)
+        {
+            var strings = sudoku.Split('\n');
+            
+            if (strings.Length < 9)
+                return false;
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (strings[i].Length != 9)
+                    return false;
+                for (int j = 0; j < 9; j++)
+                {
+                    Grid[i, j].Text = strings[i].Substring(j, 1);
                 }
             }
             return true;
