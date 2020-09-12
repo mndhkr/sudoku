@@ -905,7 +905,8 @@ namespace Sudoku
                 for (int j = 0; j < 9; j++)
                 {
                     int n = IntGrid[i, j];
-                    if (n == 0) continue;
+                    if (n == 0) 
+                        continue;
                     if (!CheckHorizontalCoherence(n, i, j) || !CheckVerticalCoherence(n, i, j) || !CheckBoxCoherence(n, i, j))
                     {
                         Grid[i, j].ForeColor = Color.Red;

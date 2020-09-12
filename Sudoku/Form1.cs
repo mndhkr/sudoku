@@ -652,6 +652,9 @@ namespace Sudoku
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (this.FileName == null)
+                return;
+
             string sudoku = File.ReadAllText(this.FileName);
             var loaded = this.Sudoku.LoadFromString(sudoku);
             if (!loaded)
