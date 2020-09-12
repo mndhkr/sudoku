@@ -164,7 +164,6 @@ namespace Sudoku
 
             for (int i = 0; i < 100; i++)
             {
-
                 Console.WriteLine("Iterazione n° {0}", i);
 
                 Logic();
@@ -193,11 +192,12 @@ namespace Sudoku
 
                                     if (!CheckChanges() && res)
                                     {
+                                        Console.WriteLine("Popping state");
+                                        PrintIntGrid();
                                         PopState();
                                         CopyIntToTextBoxes();
                                         Application.DoEvents();
                                     }
-
                                 }
                             }
                             LastTriedCandidate = 0;
@@ -237,11 +237,19 @@ namespace Sudoku
 
         private bool TestNumber(int n, int x, int y)
         {
-            if (CheckCoherence(n, x, y) == false)
-                return false;
+            Console.WriteLine("Guess {0}, in {1},{2}", n, x, y);
 
-            SaveState();
+            if (CheckCoherence(n, x, y) == false)
+            {
+                Console.WriteLine("Fail {0}, in {1},{2}", n, x, y);
+                return false;
+            }
+
+            PushState();
+            Console.WriteLine("Saving state");
+
             IntGrid[x, y] = n;
+            Console.WriteLine("Trying {0}, in {1},{2}", n, x, y);
             Logic();
             while(CheckChanges())
             {
@@ -328,6 +336,7 @@ namespace Sudoku
 
             this.SavedState = States.Last();
             States.RemoveLast();
+            LoadState();
             return true;
         }
 
