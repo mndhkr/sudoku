@@ -18,7 +18,7 @@ namespace Sudoku
         private LinkedList<int>[,] CandidatesGrid { get; set; }
 
         private Int32[,] SavedState { get; set; }
-        private int LastTriedCandidate { get; set; }
+        private int LastTriedCandidate { get; set; } = 0;
         private bool StateSaved { get; set; } = false;
 
         private int Zeroes { get; set; } = 0;
@@ -27,6 +27,7 @@ namespace Sudoku
         private bool Guessed { get; set; } = false;
 
         private LinkedList<int[,]> States { get; set; }
+        private LinkedList<int> LastTriedCandidates { get; set; }
 
         public Sudoku()
         {
@@ -168,6 +169,42 @@ namespace Sudoku
 
                 Logic();
 
+                if(!CheckChanges())
+                {
+                    for(int x = 0; x < 9; x++)
+                    {
+                        for(int y = 0; y < 9; y++)
+                        {
+                            int[] candidates = CandidatesGrid[x, y].ToArray();
+                            Array.Sort(candidates);
+                            for(int c = 0; c < candidates.Length; c++)
+                            {
+                                if(candidates[c] > LastTriedCandidate)
+                                {
+                                    int n = candidates[c];
+                                    LastTriedCandidate = n;
+                                    var res = TestNumber(n, x, y);
+
+                                    CopyIntToTextBoxes();
+                                    Application.DoEvents();
+
+                                    if (CountZeroes() == 0)
+                                        return;
+
+                                    if (!CheckChanges() && res)
+                                    {
+                                        PopState();
+                                        CopyIntToTextBoxes();
+                                        Application.DoEvents();
+                                    }
+
+                                }
+                            }
+                            LastTriedCandidate = 0;
+                        }
+                    }
+                }
+
                 //if (!hasCandidates())
                 //    break;
                 //InitCandidates();
@@ -198,8 +235,24 @@ namespace Sudoku
 
         }
 
+        private bool TestNumber(int n, int x, int y)
+        {
+            if (CheckCoherence(n, x, y) == false)
+                return false;
+
+            SaveState();
+            IntGrid[x, y] = n;
+            Logic();
+            while(CheckChanges())
+            {
+                Logic();
+            }
+            return true;
+        }
+
         private void Logic()
         {
+            InitCandidates();
             FindCandidates();
             FixCandidates();
 
@@ -277,6 +330,8 @@ namespace Sudoku
             States.RemoveLast();
             return true;
         }
+
+        
 
         public bool hasCandidates()
         {
