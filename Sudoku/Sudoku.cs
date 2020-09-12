@@ -26,11 +26,14 @@ namespace Sudoku
 
         private bool Guessed { get; set; } = false;
 
+        private LinkedList<int[,]> States { get; set; }
+
         public Sudoku()
         {
             Grid = new TextBox[9, 9];
             IntGrid = new int[9, 9];
             InitCandidates();
+            States = new LinkedList<int[,]>();
         }
 
         public int GetValue(TextBox t)
@@ -162,65 +165,8 @@ namespace Sudoku
             {
 
                 Console.WriteLine("Iterazione n° {0}", i);
-                FindCandidates();
-                FixCandidates();
 
-                //PrintIntGrid();
-                //Console.WriteLine();
-
-                InitCandidates();
-                FindCandidates();
-
-                FixRemaindersRow();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                FixRemaindersColumn();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                FixRemaindersBox();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                //PrintIntGrid();
-                //Console.WriteLine();
-
-                FillMandatoryinColumn();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                FillMandatoryinLine();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                FillMandatoryInBox();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                FillColumns();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
-
-                FillRows();
-
-                InitCandidates();
-                FindCandidates();
-                FixCandidates();
+                Logic();
 
                 //if (!hasCandidates())
                 //    break;
@@ -250,6 +196,86 @@ namespace Sudoku
             CopyIntToTextBoxes();
             PrintIntGrid();
 
+        }
+
+        private void Logic()
+        {
+            FindCandidates();
+            FixCandidates();
+
+            //PrintIntGrid();
+            //Console.WriteLine();
+
+            InitCandidates();
+            FindCandidates();
+
+            FixRemaindersRow();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            FixRemaindersColumn();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            FixRemaindersBox();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            //PrintIntGrid();
+            //Console.WriteLine();
+
+            FillMandatoryinColumn();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            FillMandatoryinLine();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            FillMandatoryInBox();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            FillColumns();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+
+            FillRows();
+
+            InitCandidates();
+            FindCandidates();
+            FixCandidates();
+        }
+
+        private bool PushState()
+        {
+            SaveState();
+            States.AddLast(this.SavedState);
+            return true;
+        }
+
+        private bool PopState()
+        {
+            if (States.Count == 0)
+                return false;
+
+            this.SavedState = States.Last();
+            States.RemoveLast();
+            return true;
         }
 
         public bool hasCandidates()
