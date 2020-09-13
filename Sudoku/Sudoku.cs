@@ -239,6 +239,9 @@ namespace Sudoku
                                     PopState();
                                     CopyIntToTextBoxes();
                                     Application.DoEvents();
+                                } else
+                                {
+                                    //Guess();
                                 }
                             }
                         }
