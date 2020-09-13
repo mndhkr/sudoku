@@ -160,6 +160,7 @@ namespace Sudoku
             if(!CheckCoherence())
             {
                 MessageBox.Show("Incoerenza nella griglia di partenza");
+                return;
             }
 
             for (int i = 0; i < 100; i++)
@@ -168,42 +169,7 @@ namespace Sudoku
 
                 Logic();
 
-                if(!CheckChanges())
-                {
-                    for(int x = 0; x < 9; x++)
-                    {
-                        for(int y = 0; y < 9; y++)
-                        {
-                            int[] candidates = CandidatesGrid[x, y].ToArray();
-                            Array.Sort(candidates);
-                            for(int c = 0; c < candidates.Length; c++)
-                            {
-                                if(candidates[c] > LastTriedCandidate)
-                                {
-                                    int n = candidates[c];
-                                    LastTriedCandidate = n;
-                                    var res = TestNumber(n, x, y);
-
-                                    CopyIntToTextBoxes();
-                                    Application.DoEvents();
-
-                                    if (CountZeroes() == 0)
-                                        return;
-
-                                    if (!CheckChanges() && res)
-                                    {
-                                        Console.WriteLine("Popping state");
-                                        PrintIntGrid();
-                                        PopState();
-                                        CopyIntToTextBoxes();
-                                        Application.DoEvents();
-                                    }
-                                }
-                            }
-                            LastTriedCandidate = 0;
-                        }
-                    }
-                }
+                Guess();
 
                 //if (!hasCandidates())
                 //    break;
@@ -233,6 +199,53 @@ namespace Sudoku
             CopyIntToTextBoxes();
             PrintIntGrid();
 
+        }
+
+        private void Guess()
+        {
+            if (!CheckChanges())
+            {
+                for (int x = 0; x < 9; x++)
+                {
+                    for (int y = 0; y < 9; y++)
+                    {
+                        int[] candidates = CandidatesGrid[x, y].ToArray();
+                        Array.Sort(candidates);
+                        for (int c = 0; c < candidates.Length; c++)
+                        {
+                            if (candidates[c] > LastTriedCandidate)
+                            {
+                                int n = candidates[c];
+                                LastTriedCandidate = n;
+                                var res = TestNumber(n, x, y);
+
+                                CopyIntToTextBoxes();
+                                Application.DoEvents();
+
+                                if (CountZeroes() == 0)
+                                {
+                                    return;
+                                }
+
+                                if (!CheckChanges() && res)
+                                {
+                                    Guess();
+                                }
+
+                                if(!hasCandidates())
+                                {
+                                    Console.WriteLine("Popping state");
+                                    PrintIntGrid();
+                                    PopState();
+                                    CopyIntToTextBoxes();
+                                    Application.DoEvents();
+                                }
+                            }
+                        }
+                        LastTriedCandidate = 0;
+                    }
+                }
+            }
         }
 
         private bool TestNumber(int n, int x, int y)
@@ -370,29 +383,29 @@ namespace Sudoku
             return true;
         }
 
-        private void Guess()
-        {
-            if (!this.Guessed)
-                this.SaveState();
-            for (int x = 0; x < 9; x++)
-            {
-                for (int y = 0; y < 9; y++)
-                {
-                    if (CandidatesGrid[x, y].Count > 1)
-                    {
-                        int n = CandidatesGrid[x, y].ElementAt((new Random()).Next(0, CandidatesGrid[x, y].Count - 1));
-                        if (CheckCoherence(n, x, y))
-                        {
-                            IntGrid[x, y] = n;
-                            CandidatesGrid[x, y].Clear();
-                            Console.WriteLine("Provo con {0}, in {1},{2}", IntGrid[x, y], x + 1, y + 1);
-                            return;
-                        }
-                    }
-                }
-            }
-            this.Guessed = true;
-        }
+        //private void Guess()
+        //{
+        //    if (!this.Guessed)
+        //        this.SaveState();
+        //    for (int x = 0; x < 9; x++)
+        //    {
+        //        for (int y = 0; y < 9; y++)
+        //        {
+        //            if (CandidatesGrid[x, y].Count > 1)
+        //            {
+        //                int n = CandidatesGrid[x, y].ElementAt((new Random()).Next(0, CandidatesGrid[x, y].Count - 1));
+        //                if (CheckCoherence(n, x, y))
+        //                {
+        //                    IntGrid[x, y] = n;
+        //                    CandidatesGrid[x, y].Clear();
+        //                    Console.WriteLine("Provo con {0}, in {1},{2}", IntGrid[x, y], x + 1, y + 1);
+        //                    return;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    this.Guessed = true;
+        //}
 
         public bool CheckVertical(int n, int i, int j)
         {
